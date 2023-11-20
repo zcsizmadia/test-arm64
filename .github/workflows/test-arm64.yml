@@ -7,8 +7,10 @@ jobs:
     strategy:
       matrix:
         target:
-          - { 'os': 'ubuntu-latest', 'arch': 'amd64' }
-          - { 'os': ['self-hosted', 'asf-arm'], 'arch': 'arm64' }
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+          - ['self-hosted', 'asf-arm']
 
     runs-on: ${{ matrix.target.os }}
 
@@ -16,9 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install packages
-        shell: bash
-        run: sudo apt-get install -y libzstd-dev libicu-dev
+      # - name: Install packages
+      #   if: ${{ matrix.target.os }} != 'release'
+      #   shell: bash
+      #   run: sudo apt-get install -y libzstd-dev libicu-dev
 
       - name: Install .NET SDKs
         uses: actions/setup-dotnet@v3
