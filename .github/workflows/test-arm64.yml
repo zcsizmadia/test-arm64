@@ -12,7 +12,7 @@ jobs:
           - macos-latest
           - ['self-hosted', 'asf-arm']
 
-    runs-on: ${{ matrix.target.os }}
+    runs-on: ${{ matrix.target}}
 
     steps:
       - name: Checkout
