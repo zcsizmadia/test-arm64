@@ -1,8 +1,12 @@
 #!/bin/bash
 
+set -e
+set -x
+
 apt-get update -q
 apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev git ca-certificates
 
+# Install .NET SDKs
 curl --insecure --output /tmp/dotnet-install.sh https://dot.net/v1/dotnet-install.sh
 chmod +x /tmp/dotnet-install.sh
 
@@ -14,9 +18,11 @@ chmod +x /tmp/dotnet-install.sh
 
 export PATH=$PATH:/usr/share/dotnet
 
-dotnet --list-sdks
-
-ls -al
-
+# Clone repo
 git config --global url.https://github.com/.insteadOf git://github.com/
-git clone https://github.com/githubtraining/hellogitworld.git
+git clone https://github.com/apache/avro.git
+
+pushd "avro/lang/csharp"
+./build.sh test
+popd
+
