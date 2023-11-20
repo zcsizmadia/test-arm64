@@ -40,4 +40,4 @@ jobs:
             -w ${{ github.workspace }} \
             --platform linux/${{ matrix.arch }} \
             ${{ matrix.distro }} \
-            build.sh
+            bash build.sh

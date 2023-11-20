@@ -13,4 +13,8 @@ export PATH=$PATH:/usr/share/dotnet
 
 dotnet --list-sdks
 
-echo Done.
+ls -al
+
+git config --global url.https://github.com/.insteadOf git://github.com/
+git clone https://github.com/githubtraining/hellogitworld.git
+
