@@ -4,23 +4,27 @@ on:
 
 jobs:
   build:
-    runs-on: ["self-hosted", "asf-arm"]
+    strategy:
+      matrix:
+        target: [{ 'os': 'ubuntu-latest', 'arch': 'amd64' }, { 'os': ['self-hosted', 'asf-arm'], 'arch': 'arm64' }]
+
+    runs-on: ${{ matrix.target.os }}
 
     steps:
-      - name: Checkout
+      - name: Checkout on ${{ matrix.target.arch }}
         uses: actions/checkout@v4
 
-      - name: Install packages
+      - name: Install packages on ${{ matrix.target.arch }}
         shell: bash
         run: sudo apt-get install -y libzstd-dev libicu-dev
 
-      - name: Install .NET SDKs
+      - name: Install .NET SDKs on ${{ matrix.target.arch }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
             8.0.x
 
-      - name: Cache Nuget
+      - name: Cache Nuget on ${{ matrix.target.arch }}
         uses: actions/cache@v3
         with:
           path: ~/.nuget/packages
@@ -28,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Build
+      - name: Build on ${{ matrix.target.arch }}
         run: |
           dotnet build -c Release src/
           dotnet run -c Release --project src/
