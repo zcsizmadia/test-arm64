@@ -18,10 +18,10 @@ jobs:
     strategy:
       matrix:
         arch:
-          - docker: amd64
-          - docker: arm64
+          - amd64
+          - arm64
         distro:
-          - container: "ubuntu:jammy"
+          - ubuntu:jammy
 
     steps:
       - name: Checkout
