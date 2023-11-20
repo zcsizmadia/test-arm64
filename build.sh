@@ -19,9 +19,9 @@ export PATH=$PATH:/usr/share/dotnet
 
 # Clone repo
 git config --global url.https://github.com/.insteadOf git://github.com/
-git clone https://github.com/apache/avro.git
+git clone https://github.com/ied206/Joveler.Compression.git
 
-pushd "avro/lang/csharp"
-./build.sh test
+pushd Joveler.Compression
+dotnet build -c Release
+dotnet test -c Release
 popd
-
