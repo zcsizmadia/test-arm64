@@ -2,44 +2,82 @@ name: 'Test ARM64'
 on:
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: src
-    
 jobs:
-  build:
-    strategy:
-      matrix:
-        target:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-          - ['self-hosted', 'asf-arm']
-
-    runs-on: ${{ matrix.target}}
-
+  armv64_job:
+    # The host should always be Linux
+    runs-on: ubuntu-latest
+    name: Build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install .NET SDKs
-        uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+      - uses: uraimo/run-on-arch-action@v2
+        name: Build
+        id: runcmd
         with:
-          dotnet-version: |
-            8.0.x
+          arch: arm64
+          distro: ubuntu-latest
 
-      - name: Cache NuGet
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          # Not required, but speeds up builds by storing container images in
+          # a GitHub package registry.
+          githubToken: ${{ github.token }}
 
-      - name: Build
-        run: |
-          dotnet build -c Release
+          # Set an output parameter `uname` for use in subsequent steps
+          run: |
+            set -x
+            apt-get update -q
+            apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates
+            curl -sSLk --output - https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel "8.0" --install-dir "/usr/share/dotnet" # 8.0
+            export PATH=$PATH:/usr/share/dotnet
+            cd src
+            dotnet build -c Release
+            dotnet test -c Release
 
-      - name: Run
-        run: |
-          dotnet run -c Release
+# name: 'Test ARM64'
+# on:
+#   workflow_dispatch:
+
+# defaults:
+#   run:
+#     working-directory: src
+    
+# jobs:
+#   build:
+#     strategy:
+#       matrix:
+#         target:
+#           - ubuntu-latest
+#           - windows-latest
+#           - macos-latest
+#           - ['self-hosted', 'asf-arm']
+
+#     runs-on: ${{ matrix.target}}
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Set up QEMU
+#         uses: docker/setup-qemu-action@v1
+#         with:
+#           platforms: all
+
+#       - name: Install .NET SDKs
+#         uses: actions/setup-dotnet@v3
+#         with:
+#           dotnet-version: |
+#             8.0.x
+
+#       - name: Cache NuGet
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.nuget/packages
+#           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-nuget-
+
+#       - name: Build
+#         run: |
+#           dotnet build -c Release
+
+#       - name: Run
+#         run: |
+#           dotnet run -c Release
