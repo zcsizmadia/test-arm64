@@ -14,7 +14,7 @@ jobs:
         id: runcmd
         with:
           arch: aarch64
-          distro: bullseye
+          distro: ubuntu_latest
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -24,9 +24,7 @@ jobs:
           run: |
             set -x
             apt-get update -q
-            apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates
-            curl -sSLk --output - https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel "8.0" --install-dir "/usr/share/dotnet" # 8.0
-            export PATH=$PATH:/usr/share/dotnet
+            apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates dotnet-sdk-7.0
             cd src
             dotnet build -c Release
             dotnet test -c Release
