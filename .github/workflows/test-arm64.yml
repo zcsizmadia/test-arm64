@@ -14,7 +14,7 @@ jobs:
         id: runcmd
         with:
           arch: aarch64
-          distro: ubuntu_latest
+          distro: bullseye
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -30,54 +30,3 @@ jobs:
             cd src
             dotnet build -c Release
             dotnet test -c Release
-
-# name: 'Test ARM64'
-# on:
-#   workflow_dispatch:
-
-# defaults:
-#   run:
-#     working-directory: src
-    
-# jobs:
-#   build:
-#     strategy:
-#       matrix:
-#         target:
-#           - ubuntu-latest
-#           - windows-latest
-#           - macos-latest
-#           - ['self-hosted', 'asf-arm']
-
-#     runs-on: ${{ matrix.target}}
-
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
-
-#       - name: Set up QEMU
-#         uses: docker/setup-qemu-action@v1
-#         with:
-#           platforms: all
-
-#       - name: Install .NET SDKs
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-version: |
-#             8.0.x
-
-#       - name: Cache NuGet
-#         uses: actions/cache@v3
-#         with:
-#           path: ~/.nuget/packages
-#           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-#           restore-keys: |
-#             ${{ runner.os }}-nuget-
-
-#       - name: Build
-#         run: |
-#           dotnet build -c Release
-
-#       - name: Run
-#         run: |
-#           dotnet run -c Release
