@@ -90,7 +90,13 @@ namespace Test
         {
             InitializeXZ();
 
-            Console.WriteLine("Hello World!");
+            using (FileStream inStream = new FileStream("test.bin.xz", FileMode.Open))
+            using (MemoryStream outStream = new MemoryStream())
+            using (XZStream xzStream = new XZStream(inStream, new XZDecompressOptions()))
+            {
+                xzStream.CopyTo(outStream);
+                Console.WriteLine($"Decompressed {inStream.Position} bytes -> {outStream.Length} bytes");
+            }
         }
     }
 }
