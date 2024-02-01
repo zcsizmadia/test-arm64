@@ -29,7 +29,6 @@ jobs:
 
       - name: Build
         run: |
-          set -x
           cd src
           dotnet --list-sdks
           dotnet build -c Release
