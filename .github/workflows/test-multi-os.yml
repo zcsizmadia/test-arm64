@@ -1,19 +1,21 @@
-name: 'Test ARM64'
+name: 'Test Multi OS'
 on:
   workflow_dispatch:
 
 jobs:
-  armv64_job:
-    runs-on: macos-14
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Info
-        run: uname -a
-
-      - name: Add libzstd
-        shell: bash
-        run: echo sudo apt-get install -y libzstd-dev
+        run: |
+          echo ${{matrix.os}}
+          uname -a
 
       - name: Install .NET SDKs
         uses: actions/setup-dotnet@v4
@@ -28,9 +30,8 @@ jobs:
       - name: Build
         run: |
           set -x
-          echo apt-get update -q
-          echo apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates dotnet-sdk-7.0
           cd src
           dotnet --list-sdks
           dotnet build -c Release
-          dotnet test -c Release
+          dotnet run -c Release -no-build
+

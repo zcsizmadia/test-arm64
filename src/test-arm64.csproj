@@ -5,8 +5,4 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Joveler.Compression.XZ" Version="4.3.0" />
-  </ItemGroup>
-
 </Project>
