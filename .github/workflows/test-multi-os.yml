@@ -21,10 +21,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            3.1.x
-            5.0.x
-            6.0.x
-            7.0.x
             8.0.x
 
       - name: Build
@@ -32,5 +28,7 @@ jobs:
           cd src
           dotnet --list-sdks
           dotnet build -c Release
-          dotnet run -c Release -no-build
 
+      - name: Run
+        run: |
+          dotnet run -c Release
