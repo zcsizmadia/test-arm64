@@ -25,10 +25,9 @@ jobs:
 
       - name: Build
         run: |
-          cd src
           dotnet --list-sdks
-          dotnet build -c Release
+          dotnet build -c Release src/
 
       - name: Run
         run: |
-          dotnet run -c Release
+          dotnet run -c Release --project src/
