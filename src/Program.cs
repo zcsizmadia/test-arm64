@@ -82,6 +82,8 @@ namespace Test
             if (string.IsNullOrEmpty(foundLibPath))
                 throw new PlatformNotSupportedException($"Unable to find {libName}");
 
+            Console.WriteLine($"Using {libName} from {foundLibPath}");
+
             // Initialize XZ library
             XZInit.GlobalInit(foundLibPath);
         }

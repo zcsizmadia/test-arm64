@@ -4,27 +4,33 @@ on:
 
 jobs:
   armv64_job:
-    # The host should always be Linux
-    runs-on: ubuntu-latest
-    name: Build
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Build
-        id: runcmd
+
+      - name: Info
+        run: uname -a
+
+      - name: Add libzstd
+        shell: bash
+        run: echo sudo apt-get install -y libzstd-dev
+
+      - name: Install .NET SDKs
+        uses: actions/setup-dotnet@v4
         with:
-          arch: aarch64
-          distro: ubuntu_latest
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
+            7.0.x
+            8.0.x
 
-          # Not required, but speeds up builds by storing container images in
-          # a GitHub package registry.
-          githubToken: ${{ github.token }}
-
-          # Set an output parameter `uname` for use in subsequent steps
-          run: |
-            set -x
-            apt-get update -q
-            apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates dotnet-sdk-7.0
-            cd src
-            dotnet build -c Release
-            dotnet test -c Release
+      - name: Build
+        run: |
+          set -x
+          echo apt-get update -q
+          echo apt-get install -q -y --no-install-recommends curl libzstd-dev libicu-dev ca-certificates dotnet-sdk-7.0
+          cd src
+          dotnet --list-sdks
+          dotnet build -c Release
+          dotnet test -c Release
