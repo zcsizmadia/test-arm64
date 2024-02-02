@@ -7,14 +7,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-#        os: [ubuntu-latest, windows-latest, macos-latest, macos-14]
+        os: [ubuntu-latest]
+        config: [Debug, Release]
         include:
-          - os: ubuntu-latest
+          - os: macos-14
             config: Debug
-          - os: ubuntu-latest
-            config: Release
-          - os: ubuntu-latest
-            config: Release
 
     steps:
       - uses: actions/checkout@v4
