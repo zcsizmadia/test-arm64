@@ -9,9 +9,11 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         config: [Debug, Release]
+        value: [1, 2, 3]
         include:
           - os: macos-14
-            config: Debug
+            config: 'Debug'
+            value: '2'
 
     steps:
       - uses: actions/checkout@v4
@@ -20,6 +22,7 @@ jobs:
         run: |
           echo ${{matrix.os}}
           echo ${{matrix.config}}
+          echo ${{matrix.value}}
           uname -a
 
       - name: Install .NET SDKs
