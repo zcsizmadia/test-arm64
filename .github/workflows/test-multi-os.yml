@@ -7,7 +7,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest, macos-14]
+#        os: [ubuntu-latest, windows-latest, macos-latest, macos-14]
+        include:
+          - os: ubuntu-latest
+            config: Debug
+          - os: ubuntu-latest
+            config: Release
+          - os: ubuntu-latest
+            config: Release
 
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +22,7 @@ jobs:
       - name: Info
         run: |
           echo ${{matrix.os}}
+          echo ${{matrix.config}}
           uname -a
 
       - name: Install .NET SDKs
@@ -26,8 +34,8 @@ jobs:
       - name: Build
         run: |
           dotnet --list-sdks
-          dotnet build -c Release src/
+          dotnet build -c ${{ matrix.config }} src/
 
       - name: Run
         run: |
-          dotnet run -c Release --project src/
+          dotnet run -c ${{ matrix.config }} --project src/
